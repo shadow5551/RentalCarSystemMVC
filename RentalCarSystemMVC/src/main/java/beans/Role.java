@@ -10,6 +10,7 @@ public enum Role {
     USER,
     ;
     @Id
+    @Column(name = "id",insertable = false, updatable = false , nullable = false)
     private int id;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "roles")

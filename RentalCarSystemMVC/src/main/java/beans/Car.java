@@ -2,14 +2,12 @@ package beans;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @Table (name = "Cars")
-public class Car {
-
-
-    @Id
-    private int id;
+public class Car extends BeanId implements Serializable{
 
     @Column(name = "countOfCars")
     private int countOfCars;
@@ -21,26 +19,29 @@ public class Car {
     @JoinColumn(name="brand_id", unique = true, nullable = false)
     private Brand brand;
 
-    @OneToOne(optional = false, mappedBy="car")
-    public Order order;
 
-    public Car(int id, int countOfCars, int pricePerDay) {
-        this.id = id;
+    public Car(int countOfCars, int pricePerDay) {
         this.countOfCars = countOfCars;
         this.pricePerDay = pricePerDay;
     }
+
+    public Car(int countOfCars) {
+        this.countOfCars = countOfCars;
+    }
+
+    public Car(int countOfCars, int pricePerDay, Brand brand) {
+        this.countOfCars = countOfCars;
+        this.pricePerDay = pricePerDay;
+        this.brand = brand;
+
+    }
+
+
 
     public Car() {
     }
 
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Car(int id) {
-        this.id = id;
-    }
 
     public int getPricePerDay() {
         return pricePerDay;
@@ -60,12 +61,14 @@ public class Car {
     }
 
     @Override
-    public int hashCode() {
-        return 76+13*id;
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null) return false;
+        if(this.getClass() != other.getClass()) return false;
+        Car otherObj = (Car) other;
+        if (!Objects.equals(this.getPricePerDay(), otherObj.getPricePerDay())) return false;
+        if (!Objects.equals(this.getCountOfCars(), otherObj.getCountOfCars())) return false;
+        return true;
     }
 
-
-    public Integer getId() {
-        return id;
-    }
 }

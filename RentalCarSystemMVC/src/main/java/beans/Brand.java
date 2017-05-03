@@ -4,10 +4,8 @@ import javax.persistence.*;
 
 @Entity
 @Table (name = "Brands")
-public class Brand {
+public class Brand extends BeanId{
 
-    @Id
-    private int id;
 
     @Column(name = "brand")
     private String brand;
@@ -15,10 +13,14 @@ public class Brand {
     @Column(name = "model")
     private String model;
 
-    @OneToOne(optional = false, mappedBy="brand")
-    public Car car;
-
     public Brand(String brand, String model) {
+        this.brand = brand;
+        this.model = model;
+    }
+
+
+    public Brand(Integer id, String brand, String model, Car car) {
+        super(id);
         this.brand = brand;
         this.model = model;
     }
@@ -26,13 +28,6 @@ public class Brand {
     public Brand() {
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getBrand() {
         return brand;

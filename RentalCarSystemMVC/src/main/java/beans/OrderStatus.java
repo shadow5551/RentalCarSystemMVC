@@ -1,9 +1,6 @@
 package beans;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Statuses")
@@ -16,6 +13,7 @@ public enum  OrderStatus {
     CLOSED,;
 
     @Id
+    @Column(name = "id",insertable = false, updatable = false , nullable = false)
     private int id;
 
     @OneToOne(optional = false, mappedBy="orderStatus")

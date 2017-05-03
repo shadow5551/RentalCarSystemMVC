@@ -7,10 +7,8 @@ import java.util.Set;
 
 @Entity
 @Table (name = "Orders")
-public class Order {
+public class Order extends BeanId {
 
-    @Id
-    private int id;
 
     @Column(name = "startDate")
     private Date startDate;
@@ -28,24 +26,30 @@ public class Order {
     private int repairPrice;
 
     @OneToOne(optional = false)
-    @JoinColumn(name="id", unique = true, nullable = false)
+    @JoinColumn(name="id", unique = true, nullable = false , insertable = false ,updatable = false)
     private OrderStatus orderStatus;
 
     @OneToOne(optional = false)
-    @JoinColumn(name="id", unique = true, nullable = false)
+    @JoinColumn(name="id", unique = true, nullable = false , insertable = false,updatable = false)
     private Car car;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "order")
-    private Set<User> users;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "id", nullable = false , insertable = false,updatable = false)
+    private User user;
 
-
-    public int getId() {
-        return id;
+    public Order(Integer id, Date startDate, Date endDate, String clarification, int price, int repairPrice, OrderStatus orderStatus, Car car, User user) {
+        super(id);
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.clarification = clarification;
+        this.price = price;
+        this.repairPrice = repairPrice;
+        this.orderStatus = orderStatus;
+        this.car = car;
+        this.user = user;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Order(){}
 
     public Date getStartDate() {
         return startDate;
@@ -103,11 +107,11 @@ public class Order {
         this.car = car;
     }
 
-    public Set<User> getUsers() {
-        return users;
+    public User getUser() {
+        return user;
     }
 
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

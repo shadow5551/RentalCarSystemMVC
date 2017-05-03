@@ -1,15 +1,11 @@
 package beans;
 
 import javax.persistence.*;
-import java.awt.print.Book;
 import java.util.Set;
 
 @Entity
 @Table(name = "Users")
-public class User {
-
-    @Id
-    private int id;
+public class User extends BeanId {
 
     @Column(name = "login")
     private String login;
@@ -30,9 +26,10 @@ public class User {
     )
     private Set<Role> roles;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name = "id", nullable = false)
-    private Order order;
+
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private Set<Order> orders;
 
     public User(String login, String password, String numberOfPassport, int balance) {
         this.login = login;
@@ -42,10 +39,17 @@ public class User {
 
     }
 
-
-
-    public User() {
+    public User(Integer id, String login, String password, int balance, String numberOfPassport, Set<Role> roles, Set<Order> orders) {
+        super(id);
+        this.login = login;
+        this.password = password;
+        this.balance = balance;
+        this.numberOfPassport = numberOfPassport;
+        this.roles = roles;
+        this.orders = orders;
     }
+
+    public User(){}
 
     public int getBalance() {
         return balance;
@@ -79,12 +83,5 @@ public class User {
         this.numberOfPassport = numberOfPassport;
     }
 
-
-
-    @Override
-    public String toString() {
-        return String
-                .format("id : %5s login: %5s password: %5s numberPassport: %5s",login, password, numberOfPassport);
-    }
 
 }
